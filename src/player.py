@@ -1,6 +1,6 @@
 import pygame as pg
 from src.utils import import_folder
-from src.constants import *
+from src.constants import WIN_WIDTH, WIN_HEIGHT
 
 
 class Player:

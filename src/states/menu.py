@@ -1,9 +1,9 @@
 import pygame as pg
 from src.utils import import_folder
-from src.constants import *
+from src.constants import WIN_WIDTH, WIN_HEIGHT
 from src.button import Button
 from src.state_enum import States
-from states.base import BaseState
+from src.states.base import BaseState
 
 
 class Menu(BaseState):
@@ -13,14 +13,14 @@ class Menu(BaseState):
         self.anim = import_folder("assets/menu")
         self.anim.reverse()
         self.rot_anim = []
-        self.pivot = (WIN_SIZE[0] // 2, WIN_SIZE[1] // 2)
+        self.pivot = (WIN_WIDTH // 2, WIN_HEIGHT // 2)
         self.angle = 0
 
         self.title = Button(
-            self.app, self.app.caption_font, "INTO THE PIT", (255, 40, 10), (WIN_SIZE[0] // 2, 50)
+            self.app, self.app.caption_font, "NIGHT TERROR", (255, 40, 10), (WIN_WIDTH // 2, 50)
         )
         self.play_button = Button(
-            self.app, self.app.text_font, "PLAY", (255, 255, 255), (WIN_SIZE[0] // 2, 145)
+            self.app, self.app.button_font, "PLAY", (255, 255, 255), (WIN_WIDTH // 2, 145)
         )
 
     def handle_events(self, event):

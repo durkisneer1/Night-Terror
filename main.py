@@ -1,9 +1,12 @@
 import pygame as pg
-from src.constants import *
+from src.constants import WIN_SIZE
 from src.state_enum import States
-from states.menu import Menu
-from states.game import Game
-from states.pause import Pause
+from src.states.menu import Menu
+from src.states.game import Game
+from src.states.pause import Pause
+from src.states.mirror import Mirror
+from src.states.dream import Dream
+from src.states.note import Note
 
 
 class App:
@@ -11,16 +14,20 @@ class App:
         pg.init()
 
         self.screen = pg.display.set_mode(WIN_SIZE, pg.SCALED)
-        pg.display.set_caption("Into The Pit")
+        pg.display.set_caption("Night Terror")
         self.clock = pg.time.Clock()
         self.caption_font = pg.font.Font("assets/fonts/Zombie.ttf", 24)
-        self.text_font = pg.font.Font("assets/fonts/DePixelHalbfett.ttf", 9)
+        self.button_font = pg.font.Font("assets/fonts/DePixelHalbfett.ttf", 9)
+        self.note_font = pg.font.Font("assets/fonts/dogicapixel.ttf", 8)
         self.done = False
 
         self.states = {
             States.MENU: Menu(self),
             States.GAME: Game(self),
             States.PAUSE: Pause(self),
+            States.MIRROR: Mirror(self),
+            States.DREAM: Dream(self),
+            States.NOTE: Note(self),
         }
         self.current_state = self.states[States.MENU]
 
@@ -41,7 +48,7 @@ class App:
                 if event.type == pg.QUIT:
                     self.done = True
 
-            self.screen.fill((0, 0, 0))
+            self.screen.fill((21, 18, 37))
 
             self.current_state.update()
             self.current_state.draw()
