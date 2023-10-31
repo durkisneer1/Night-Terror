@@ -1,9 +1,8 @@
 import pygame as pg
-from state_enum import States
+from src.state_enum import States
 from states.base import BaseState
-from player import Player
-from tile import Tile
-from constants import *
+from src.player import Player
+from src.tile import Tile
 
 
 class Game(BaseState):
@@ -14,8 +13,6 @@ class Game(BaseState):
         self.tile_surf = pg.Surface((16, 16))
         self.tile_surf.fill((255, 255, 255))
         self.player = Player(self, self.tiles)
-        self.map_center = pg.Vector2(WIN_WIDTH / 2, WIN_HEIGHT / 2)
-        self.map_offset = self.map_center - self.player.pos
 
     def handle_events(self, event):
         if event.type == pg.KEYDOWN:
@@ -25,7 +22,6 @@ class Game(BaseState):
 
     def update(self):
         self.player.move()
-        self.map_offset = self.map_center - self.player.pos
 
     def draw(self):
         self.player.draw()

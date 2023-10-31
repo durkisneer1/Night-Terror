@@ -1,6 +1,6 @@
 import pygame as pg
-from utils import import_folder
-from constants import *
+from src.utils import import_folder
+from src.constants import *
 
 
 class Player:
@@ -22,7 +22,10 @@ class Player:
         self.direction = pg.Vector2()
         self.move_speed = 70
         self.anim_speed = 4.5
+        self.gravity = 0.6
+
         self.facing_right = True
+        self.on_ground = False
 
     def animate(self):
         self.current_frame %= len(self.frame_list)
@@ -36,6 +39,13 @@ class Player:
         self.current_frame += self.anim_speed * self.game.app.dt
 
     def move(self):
+        if self.on_ground:
+            if self.game.app.keys[pg.K_SPACE]:
+                self.velocity.y = -0.15
+                self.on_ground = False
+        else:
+            self.velocity.y += self.gravity * self.game.app.dt
+
         self.direction.xy = (0, 0)
         if self.game.app.keys[pg.K_a]:
             self.direction.x = -1
@@ -51,7 +61,7 @@ class Player:
             self.frame_list = self.anim_states["walk"]
         else:
             self.frame_list = self.anim_states["idle"]
-        self.velocity = self.direction * self.move_speed * self.game.app.dt
+        self.velocity.x = self.direction.x * self.move_speed * self.game.app.dt
 
         self.pos.x += self.velocity.x
         self.rect.x = self.pos.x
@@ -74,10 +84,11 @@ class Player:
             if self.rect.colliderect(tile.rect):
                 if self.velocity.y > 0:
                     self.rect.bottom = tile.rect.top
+                    self.on_ground = True
                 if self.velocity.y < 0:
                     self.rect.top = tile.rect.bottom
                 self.pos.y = self.rect.y
 
     def draw(self):
         self.animate()
-        self.game.app.screen.blit(self.image, self.pos + self.game.map_offset)
+        self.game.app.screen.blit(self.image, self.pos)

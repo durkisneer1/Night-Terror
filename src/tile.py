@@ -6,7 +6,7 @@ class Tile:
         self.game = game
         self.label = label
         self.pos = pg.Vector2(pos)
-        self.rect = pg.Rect(self.pos, (16, 16))
+        self.rect = pg.Rect(self.pos, (10, 10))
 
     def draw(self, texture):
-        self.game.app.screen.blit(texture, self.pos + self.game.map_offset)
+        self.game.app.screen.blit(texture, self.pos)

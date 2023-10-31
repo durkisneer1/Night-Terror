@@ -1,8 +1,8 @@
 import pygame as pg
-from state_enum import States
+from src.state_enum import States
 from states.base import BaseState
-from constants import *
-from button import Button
+from src.constants import *
+from src.button import Button
 
 
 class Pause(BaseState):

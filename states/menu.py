@@ -1,8 +1,8 @@
 import pygame as pg
-from utils import import_folder
-from constants import *
-from button import Button
-from state_enum import States
+from src.utils import import_folder
+from src.constants import *
+from src.button import Button
+from src.state_enum import States
 from states.base import BaseState
 
 
