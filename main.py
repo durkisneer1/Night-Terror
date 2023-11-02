@@ -16,11 +16,15 @@ class App:
         self.screen = pg.display.set_mode(WIN_SIZE, pg.SCALED)
         pg.display.set_caption("Night Terror")
         self.clock = pg.time.Clock()
+
         self.caption_font = pg.font.Font("assets/fonts/Zombie.ttf", 24)
         self.button_font = pg.font.Font("assets/fonts/DePixelHalbfett.ttf", 9)
         self.note_font = pg.font.Font("assets/fonts/dogicapixel.ttf", 8)
-        self.done = False
 
+        pg.mixer.music.load("assets/audio/theme.ogg")
+        pg.mixer.music.play(-1)
+
+        self.current_act = 0  # Max 5
         self.states = {
             States.MENU: Menu(self),
             States.GAME: Game(self),
@@ -31,6 +35,7 @@ class App:
         }
         self.current_state = self.states[States.MENU]
 
+        self.done = False
         self.dt = 0
         self.mouse_pos = ()
         self.mouse_input = ()
@@ -38,7 +43,7 @@ class App:
 
     def run(self):
         while not self.done:
-            self.dt = self.clock.tick() / 1000
+            self.dt = min(self.clock.tick() / 1000, 0.1)
             self.mouse_pos = pg.mouse.get_pos()
             self.mouse_input = pg.mouse.get_pressed()
             self.keys = pg.key.get_pressed()
@@ -56,7 +61,7 @@ class App:
             pg.display.flip()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = App()
     app.run()
     pg.quit()

@@ -10,13 +10,25 @@ class Pause(BaseState):
         super().__init__(app)
 
         self.title = Button(
-            self.app, self.app.caption_font, "PAUSE", (255, 40, 10), (WIN_WIDTH // 2, 50)
+            self.app,
+            self.app.caption_font,
+            "PAUSE",
+            (255, 40, 10),
+            (WIN_WIDTH // 2, 50),
         )
         self.resume_button = Button(
-            self.app, self.app.button_font, "RESUME", (255, 255, 255), (WIN_WIDTH // 3, 125)
+            self.app,
+            self.app.button_font,
+            "RESUME",
+            (255, 255, 255),
+            (WIN_WIDTH // 3, 125),
         )
         self.menu_button = Button(
-            self.app, self.app.button_font, "MENU", (255, 255, 255), (WIN_WIDTH * 2 // 3, 125)
+            self.app,
+            self.app.button_font,
+            "MENU",
+            (255, 255, 255),
+            (WIN_WIDTH * 2 // 3, 125),
         )
 
     def handle_events(self, event):

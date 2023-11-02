@@ -15,14 +15,14 @@ class Player:
         self.current_frame = 0
         self.frame_list = self.anim_states["idle"]
         self.image = self.frame_list[self.current_frame]
-        self.pos = pg.Vector2(WIN_WIDTH / 2, WIN_HEIGHT / 2)
+        self.pos = pg.Vector2(48, 120)
         self.rect = self.image.get_rect()
 
-        self.velocity = pg.Vector2()
-        self.direction = pg.Vector2()
-        self.move_speed = 70
-        self.anim_speed = 4.5
-        self.gravity = 0.6
+        self.velocity = pg.Vector2(0)
+        self.x_direction = 0
+        self.move_speed = 45
+        self.anim_speed = 5
+        self.gravity = 980
 
         self.facing_right = True
         self.on_ground = False
@@ -33,40 +33,38 @@ class Player:
             self.image = self.frame_list[int(self.current_frame)]
         else:
             self.image = pg.transform.flip(
-                self.frame_list[int(self.current_frame)],
-                True, False
+                self.frame_list[int(self.current_frame)], True, False
             )
         self.current_frame += self.anim_speed * self.game.app.dt
 
     def move(self):
         if self.on_ground:
             if self.game.app.keys[pg.K_SPACE]:
-                self.velocity.y = -0.15
+                self.velocity.y = -200
                 self.on_ground = False
         else:
             self.velocity.y += self.gravity * self.game.app.dt
 
-        self.direction.xy = (0, 0)
+        self.x_direction = 0
         if self.game.app.keys[pg.K_a]:
-            self.direction.x = -1
+            self.x_direction -= 1
         if self.game.app.keys[pg.K_d]:
-            self.direction.x = 1
+            self.x_direction += 1
 
-        if self.direction:
-            self.direction.normalize_ip()
-            if self.direction.x > 0:
-                self.facing_right = True
-            elif self.direction.x < 0:
-                self.facing_right = False
+        if self.x_direction:
             self.frame_list = self.anim_states["walk"]
+            if self.x_direction > 0:
+                self.facing_right = True
+            elif self.x_direction < 0:
+                self.facing_right = False
         else:
             self.frame_list = self.anim_states["idle"]
-        self.velocity.x = self.direction.x * self.move_speed * self.game.app.dt
+        self.velocity.x = self.x_direction * self.move_speed
 
-        self.pos.x += self.velocity.x
+        self.pos.x += self.velocity.x * self.game.app.dt
         self.rect.x = self.pos.x
         self.h_collision()
-        self.pos.y += self.velocity.y
+        self.pos.y += self.velocity.y * self.game.app.dt
         self.rect.y = self.pos.y
         self.v_collision()
 
@@ -87,6 +85,7 @@ class Player:
                     self.on_ground = True
                 if self.velocity.y < 0:
                     self.rect.top = tile.rect.bottom
+                    self.velocity.y = 0
                 self.pos.y = self.rect.y
 
     def draw(self):
