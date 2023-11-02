@@ -1,6 +1,5 @@
 import pygame as pg
 from src.utils import import_folder
-from src.constants import WIN_WIDTH, WIN_HEIGHT
 
 
 class Player:
@@ -39,16 +38,16 @@ class Player:
 
     def move(self):
         if self.on_ground:
-            if self.game.app.keys[pg.K_SPACE]:
+            if self.game.app.keys[pg.K_SPACE] or self.game.app.keys[pg.K_UP]:
                 self.velocity.y = -200
                 self.on_ground = False
         else:
             self.velocity.y += self.gravity * self.game.app.dt
 
         self.x_direction = 0
-        if self.game.app.keys[pg.K_a]:
+        if self.game.app.keys[pg.K_a] or self.game.app.keys[pg.K_LEFT]:
             self.x_direction -= 1
-        if self.game.app.keys[pg.K_d]:
+        if self.game.app.keys[pg.K_d] or self.game.app.keys[pg.K_RIGHT]:
             self.x_direction += 1
 
         if self.x_direction:

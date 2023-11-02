@@ -17,6 +17,10 @@ class Game(BaseState):
         self.interaction_tile = load_tmx_objects(room_tmx_data, "Intractable")
         self.player = Player(self, self.collision_tiles)
 
+        self.desk_cover_positions = ((129, 121), (145, 121))  # Left and right desks
+        self.desk_cover_rect = pg.Surface((14, 6))
+        self.desk_cover_rect.fill((197, 145, 84))
+
         # Candlelight
         self.filter_layer = pg.Surface(WIN_SIZE, pg.SRCALPHA)
         self.base_light = pg.Surface(WIN_SIZE, pg.SRCALPHA)
@@ -56,6 +60,7 @@ class Game(BaseState):
         for intractable in self.interaction_tile:
             intractable.hovered = intractable.rect.colliderect(self.player.rect)
             intractable.draw(self.app.screen)
+        self.app.screen.blit(self.desk_cover_rect, self.desk_cover_positions[self.app.current_act < 2])
 
         self.player.draw()
 

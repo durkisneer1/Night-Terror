@@ -1,7 +1,7 @@
 import pygame as pg
 from src.state_enum import States
 from src.states.base import BaseState
-from src.constants import WIN_SIZE, WIN_WIDTH
+from src.constants import WIN_WIDTH
 from src.button import Button
 
 

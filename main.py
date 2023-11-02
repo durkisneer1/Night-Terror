@@ -6,7 +6,7 @@ from src.states.game import Game
 from src.states.pause import Pause
 from src.states.mirror import Mirror
 from src.states.dream import Dream
-from src.states.note import Note
+from src.states.desk import Note
 
 
 class App:
@@ -24,7 +24,7 @@ class App:
         pg.mixer.music.load("assets/audio/theme.ogg")
         pg.mixer.music.play(-1)
 
-        self.current_act = 0  # Max 5
+        self.current_act = 1  # Max 4
         self.states = {
             States.MENU: Menu(self),
             States.GAME: Game(self),

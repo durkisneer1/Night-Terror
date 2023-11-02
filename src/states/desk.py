@@ -2,15 +2,18 @@ import pygame as pg
 from src.state_enum import States
 from src.states.base import BaseState
 from src.utils import import_image
-from src.constants import WIN_WIDTH, WIN_HEIGHT, WIN_SIZE
+from src.constants import WIN_WIDTH, WIN_HEIGHT
 
 
 class Note(BaseState):
     def __init__(self, app):
         super().__init__(app)
 
-        self.normal_note = import_image("assets/note/note.png")
-        self.cursed_note = import_image("assets/note/cursed_note.png")
+        self.knife = import_image("assets/desk/knife.png", scale=2)
+        self.knife_rect = self.knife.get_rect(center=(WIN_WIDTH / 2, WIN_HEIGHT / 2))
+
+        self.normal_note = import_image("assets/desk/note.png")
+        self.cursed_note = import_image("assets/desk/cursed_note.png")
         self.note_rect = self.normal_note.get_rect(center=(WIN_WIDTH / 2, WIN_HEIGHT / 2))
 
         self.normal_text = self.app.note_font.render(
@@ -64,9 +67,11 @@ class Note(BaseState):
         self.app.screen.blit(self.last_frame, (0, 0))
         self.app.screen.blit(self.surface_tint, (0, 0))
 
-        if self.app.current_act < 2:
+        if self.app.current_act < 1:
             self.app.screen.blit(self.normal_note, self.note_rect)
             self.app.screen.blit(self.normal_text, self.text_rect)
-        else:
+        elif self.app.current_act < 2:
             self.app.screen.blit(self.cursed_note, self.note_rect)
             self.app.screen.blit(self.cursed_text, self.cursed_text_rect)
+        elif self.app.current_act < 3:
+            self.app.screen.blit(self.knife, self.knife_rect)

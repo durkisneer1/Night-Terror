@@ -55,7 +55,7 @@ class Mirror(BaseState):
         self.app.screen.blit(self.current_frame, self.mirror_rect)
         self.app.screen.blit(self.mirror_image, self.mirror_rect)
 
-        if self.app.current_act > 1:
+        if self.app.current_act > 2:
             self.app.screen.blit(self.blurred_distorted_face, self.blur_rect)
             self.app.screen.blit(self.distorted_face, self.face_rect)
 

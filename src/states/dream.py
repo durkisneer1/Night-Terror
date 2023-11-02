@@ -20,7 +20,7 @@ class Dream(BaseState):
         self.opacity_offset = 0
         self.circle_tick = 0
 
-        self.static_anim = [generate_static(WIN_SIZE) for i in range(20)]
+        self.static_anim = [generate_static(WIN_SIZE) for _ in range(20)]
         self.static_anim = [pg.transform.grayscale(frame) for frame in self.static_anim]
         [frame.set_alpha(8) for frame in self.static_anim]
         self.frame_index = 0
@@ -28,6 +28,10 @@ class Dream(BaseState):
 
         self.sounds = (
             pg.mixer.Sound("assets/audio/dream/first.ogg"),
+            pg.mixer.Sound("assets/audio/dream/first.ogg"),  # Placeholder sound
+            pg.mixer.Sound("assets/audio/dream/first.ogg"),  # Placeholder sound
+            pg.mixer.Sound("assets/audio/dream/first.ogg"),  # Placeholder sound
+            pg.mixer.Sound("assets/audio/dream/first.ogg"),  # Placeholder sound
         )
 
     def update(self):
