@@ -36,7 +36,7 @@ class Menu(BaseState):
             self.app.button_font,
             "QUIT",
             (255, 255, 255),
-            (WIN_WIDTH * 2/3, 145),
+            (WIN_WIDTH * 2 / 3, 145),
         )
 
     def handle_events(self, event):

@@ -7,10 +7,23 @@ class Player:
         self.game = game
         self.collision_tiles = collision_tiles
 
-        self.anim_states = {
+        self.steps_sfx = [
+            pg.mixer.Sound(f"assets/audio/walk/{i}.ogg") for i in range(5)
+        ]
+        [sfx.set_volume(0.25) for sfx in self.steps_sfx]
+        self.sound_index = 0
+        self.max_step_tick = 0.5
+        self.step_tick = self.max_step_tick
+
+        self.knife_anim = {
+            "idle": import_folder("assets/game/player/idle_knife"),
+            "walk": import_folder("assets/game/player/walk_knife"),
+        }
+        self.torch_anim = {
             "idle": import_folder("assets/game/player/idle"),
             "walk": import_folder("assets/game/player/walk"),
         }
+        self.anim_states = self.torch_anim
         self.current_frame = 0
         self.frame_list = self.anim_states["idle"]
         self.image = self.frame_list[self.current_frame]
@@ -37,6 +50,7 @@ class Player:
         self.current_frame += self.anim_speed * self.game.app.dt
 
     def move(self):
+        self.step_tick = min(self.step_tick + self.game.app.dt, self.max_step_tick)
         if self.on_ground:
             if self.game.app.keys[pg.K_SPACE] or self.game.app.keys[pg.K_UP]:
                 self.velocity.y = -200
@@ -52,10 +66,16 @@ class Player:
 
         if self.x_direction:
             self.frame_list = self.anim_states["walk"]
+
             if self.x_direction > 0:
                 self.facing_right = True
             elif self.x_direction < 0:
                 self.facing_right = False
+
+            if self.step_tick == self.max_step_tick:
+                self.steps_sfx[self.sound_index].play()
+                self.sound_index = (self.sound_index + 1) % 5
+                self.step_tick = 0
         else:
             self.frame_list = self.anim_states["idle"]
         self.velocity.x = self.x_direction * self.move_speed

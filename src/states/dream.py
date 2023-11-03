@@ -28,10 +28,10 @@ class Dream(BaseState):
 
         self.sounds = (
             pg.mixer.Sound("assets/audio/dream/first.ogg"),
-            pg.mixer.Sound("assets/audio/dream/first.ogg"),  # Placeholder sound
-            pg.mixer.Sound("assets/audio/dream/first.ogg"),  # Placeholder sound
-            pg.mixer.Sound("assets/audio/dream/first.ogg"),  # Placeholder sound
-            pg.mixer.Sound("assets/audio/dream/first.ogg"),  # Placeholder sound
+            pg.mixer.Sound("assets/audio/dream/second.ogg"),
+            pg.mixer.Sound("assets/audio/dream/third.ogg"),
+            pg.mixer.Sound("assets/audio/dream/fourth.ogg"),
+            pg.mixer.Sound("assets/audio/dream/fifth.ogg"),
         )
 
     def update(self):
@@ -51,7 +51,7 @@ class Dream(BaseState):
             pg.mixer.music.unpause()
 
     def draw(self):
-        if self.app.current_act > 0 and self.circle_tick > 1:
+        if 0 < self.app.current_act < 4 and self.circle_tick > 1:
             rand_x = randint(0, WIN_WIDTH)
             rand_y = randint(0, WIN_HEIGHT)
             pg.draw.circle(

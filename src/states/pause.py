@@ -47,4 +47,5 @@ class Pause(BaseState):
 
         if self.menu_button.input():
             self.app.current_state = self.app.states[States.MENU]
+            self.app.restart = True
         self.menu_button.draw()

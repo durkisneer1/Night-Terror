@@ -2,11 +2,13 @@ from os import walk
 import numpy as np
 import pygame as pg
 from src.tile import Tile
-from src.constants import WIN_WIDTH, WIN_HEIGHT
+import inspect
+import os
 
 
 image_load = pg.image.load
 pg_surface = pg.Surface
+pg_mixer_sound = pg.mixer.Sound
 
 MAP_OFFSET = pg.Vector2(32, 24)
 
@@ -90,9 +92,17 @@ def new_image_load(*args, **kwargs):
 
 
 def new_surface(*args, **kwargs):
-    print("Surface created")
+    calling_file = inspect.currentframe().f_back.f_globals["__file__"]
+    calling_file = os.path.basename(calling_file)
+    print(f"Surface created in {calling_file}")
     return pg_surface(*args, **kwargs)
+
+
+def new_mixer_sound(*args, **kwargs):
+    print("Sound loaded:", args[0])
+    return pg_mixer_sound(*args, **kwargs)
 
 
 pg.image.load = new_image_load
 pg.Surface = new_surface
+pg.mixer.Sound = new_mixer_sound

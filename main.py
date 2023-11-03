@@ -7,6 +7,7 @@ from src.states.pause import Pause
 from src.states.mirror import Mirror
 from src.states.dream import Dream
 from src.states.desk import Note
+from src.eyes import eye_positions
 
 
 class App:
@@ -24,7 +25,7 @@ class App:
         pg.mixer.music.load("assets/audio/theme.ogg")
         pg.mixer.music.play(-1)
 
-        self.current_act = 1  # Max 4
+        self.current_act = 0  # Max 5
         self.states = {
             States.MENU: Menu(self),
             States.GAME: Game(self),
@@ -35,6 +36,7 @@ class App:
         }
         self.current_state = self.states[States.MENU]
 
+        self.restart = False
         self.done = False
         self.dt = 0
         self.mouse_pos = ()
@@ -57,6 +59,14 @@ class App:
 
             self.current_state.update()
             self.current_state.draw()
+
+            if self.current_state == self.states[States.GAME] and self.current_act > 2:
+                for i in range(self.current_state.devil.health):
+                    pg.draw.circle(self.screen, (255, 0, 0), eye_positions[i], 1)
+
+            if self.restart:
+                self.states[States.GAME] = Game(self)
+                self.restart = False
 
             pg.display.flip()
 
