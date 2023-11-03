@@ -48,7 +48,8 @@ class Dream(BaseState):
         if self.sounds[self.app.current_act].get_num_channels() == 0:
             self.app.current_state = self.app.states[States.GAME]
             self.app.current_act += 1
-            pg.mixer.music.unpause()
+            if self.app.current_act < 5:
+                pg.mixer.music.play(-1, fade_ms=500)
 
     def draw(self):
         if 0 < self.app.current_act < 4 and self.circle_tick > 1:

@@ -20,7 +20,7 @@ class Devil:
     def hit(self):
         self.health -= 2
         if self.health <= 0:
-            pg.mixer.music.stop()
+            pg.mixer.music.fadeout(500)
 
     def animate(self):
         self.current_frame %= len(self.anim)
@@ -28,12 +28,23 @@ class Devil:
         self.current_frame += 2 * self.game.app.dt
 
     def move(self, dest_x):
-        self.speed = min(self.speed + self.game.app.dt * 70, self.max_speed) * self.game.app.dt
-        self.pos.x += self.speed * (-1 if dest_x < self.pos.x else 1)
+        if abs(dest_x - self.rect.centerx) < 1:
+            return
+        self.animate()
+
+        if dest_x > self.rect.centerx:
+            self.speed = (
+                min(self.speed + self.game.app.dt * 70, self.max_speed)
+            )
+            self.image = pg.transform.flip(self.image, True, False)
+        else:
+            self.speed = (
+                max(self.speed - self.game.app.dt * 70, -self.max_speed)
+            )
+
+        self.pos.x += self.speed * self.game.app.dt
         self.rect.bottomright = self.pos
         self.hit_rect.center = self.rect.center
-
-        self.animate()
 
     def draw(self):
         self.game.app.screen.blit(self.image, self.rect)

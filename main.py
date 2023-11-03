@@ -23,7 +23,7 @@ class App:
         self.note_font = pg.font.Font("assets/fonts/dogicapixel.ttf", 8)
 
         pg.mixer.music.load("assets/audio/theme.ogg")
-        pg.mixer.music.play(-1)
+        pg.mixer.music.play(-1, fade_ms=500)
 
         self.current_act = 0  # Max 5
         self.states = {
@@ -66,6 +66,7 @@ class App:
 
             if self.restart:
                 self.states[States.GAME] = Game(self)
+                pg.mixer.music.play(-1, fade_ms=500)
                 self.restart = False
 
             pg.display.flip()

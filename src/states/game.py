@@ -64,12 +64,11 @@ class Game(BaseState):
                 if (
                     self.app.current_act > 3
                     and self.devil.health > 0
-                    and self.knife_grabbed
+                    # and self.knife_grabbed
                 ):
                     self.swing_sfx.play(0)
                     if self.player.rect.colliderect(self.devil.hit_rect):
                         self.hit_sfx.play(0)
-                        self.devil.speed = -self.devil.max_speed * 2
                         self.devil.hit()
                     return
 
@@ -115,7 +114,8 @@ class Game(BaseState):
                             self.desk_done = False
                             self.mirror_done = False
                             self.app.current_state = self.app.states[States.DREAM]
-                            pg.mixer.music.pause()
+                            self.app.music_pos = pg.mixer.music.get_pos()
+                            pg.mixer.music.fadeout(500)
                             self.app.current_state.sounds[self.app.current_act].play(0)
 
                         self.app.current_state.last_frame = self.app.screen.copy()
@@ -123,7 +123,7 @@ class Game(BaseState):
     def update(self):
         self.player.move()
         if self.app.current_act > 3 and self.devil.health > 0:
-            self.devil.move()
+            self.devil.move(self.player.rect.centerx)
 
     def draw(self):
         for layer in self.layer_tiles:
