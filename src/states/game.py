@@ -14,6 +14,9 @@ class Game(BaseState):
 
         self.parents = import_image("assets/game/room/parents.png")
 
+        self.jumpscare_sfx = pg.mixer.Sound("assets/audio/surprise.ogg")
+        self.jumpscare_sfx.set_volume(0.5)
+
         self.paper_sfx = pg.mixer.Sound("assets/audio/desk/paper.ogg")
         self.paper_sfx.set_volume(0.3)
         self.knife_sfx = pg.mixer.Sound("assets/audio/desk/knife.ogg")
@@ -24,6 +27,7 @@ class Game(BaseState):
         self.hit_sfx = pg.mixer.Sound("assets/audio/knife/hit.ogg")
         self.hit_sfx.set_volume(0.25)
 
+        self.jumpscare = False
         self.knife_grabbed = False
 
         room_tmx_data = load_pygame("assets/game/room/room.tmx")
@@ -107,8 +111,11 @@ class Game(BaseState):
                             and self.mirror_done
                         ):
                             if self.app.current_act > 4:
-                                self.app.current_state = self.app.states[States.MENU]
-                                self.app.restart = True
+                                self.jumpscare = True
+                                self.devil.pos.x = 272
+                                self.devil.max_speed = 200
+                                self.devil.speed = -150
+                                self.jumpscare_sfx.play(0)
                                 return
 
                             self.desk_done = False
@@ -122,8 +129,15 @@ class Game(BaseState):
 
     def update(self):
         self.player.move()
-        if self.app.current_act > 3 and self.devil.health > 0:
+        if (self.app.current_act > 3 and self.devil.health > 0) or self.jumpscare:
             self.devil.move(self.player.rect.centerx)
+
+        if self.jumpscare:
+            if self.devil.rect.colliderect(self.player.rect):
+                # self.app.current_state = self.app.states[States.MENU]
+                # self.app.restart = True
+                self.jumpscare_sfx.stop()
+                self.app.done = True
 
     def draw(self):
         for layer in self.layer_tiles:
@@ -144,11 +158,12 @@ class Game(BaseState):
                 self.app.screen.blit(self.desk_cover_rect, pos)
 
         if self.app.current_act == 5:
-            self.app.screen.blit(self.parents, (232, 127))
+            self.app.screen.blit(self.parents, (218, 123))
+
+        if (self.app.current_act > 2 and self.devil.health > 0) or self.jumpscare:
+            self.devil.draw()
 
         self.player.draw()
-        if self.app.current_act > 2 and self.devil.health > 0:
-            self.devil.draw()
 
         for collider in self.collision_tiles:
             collider.draw(self.app.screen)
@@ -156,7 +171,7 @@ class Game(BaseState):
         if 0 < self.app.current_act < 5:
             self.filter_layer.fill((40,) * 4)
 
-            if self.app.current_act != 4:
+            if not self.knife_grabbed:
                 filter_center = self.player.rect.center - self.light_size / 2
                 self.filter_layer.blit(
                     self.base_light, filter_center, special_flags=pg.BLEND_RGBA_ADD

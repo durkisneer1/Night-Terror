@@ -20,12 +20,12 @@ class Devil:
     def hit(self):
         self.health -= 2
         if self.health <= 0:
-            pg.mixer.music.fadeout(500)
+            pg.mixer.music.stop()
 
     def animate(self):
         self.current_frame %= len(self.anim)
         self.image = self.anim[int(self.current_frame)]
-        self.current_frame += 2 * self.game.app.dt
+        self.current_frame += self.game.app.dt * self.speed / 10
 
     def move(self, dest_x):
         if abs(dest_x - self.rect.centerx) < 1:

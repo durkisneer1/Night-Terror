@@ -64,14 +64,12 @@ class Note(BaseState):
                 self.app.current_state = self.app.states[States.GAME]
         elif event.type == pg.MOUSEBUTTONDOWN:
             if event.button == pg.BUTTON_LEFT:
-                if self.app.current_act < 3:
+                if self.app.current_act < 3 or self.normal_state:
                     if not self.note_rect.collidepoint(event.pos):
                         self.app.current_state = self.app.states[States.GAME]
                 elif self.app.current_act < 4:
                     if not self.knife_rect.collidepoint(event.pos):
                         self.app.current_state = self.app.states[States.GAME]
-                else:
-                    self.app.current_state = self.app.states[States.GAME]
 
     def draw(self):
         self.app.screen.blit(self.last_frame, (0, 0))

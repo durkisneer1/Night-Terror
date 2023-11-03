@@ -14,7 +14,7 @@ class App:
     def __init__(self):
         pg.init()
 
-        self.screen = pg.display.set_mode(WIN_SIZE, pg.SCALED)
+        self.screen = pg.display.set_mode(WIN_SIZE, pg.SCALED | pg.FULLSCREEN)
         pg.display.set_caption("Night Terror")
         self.clock = pg.time.Clock()
 
@@ -23,7 +23,7 @@ class App:
         self.note_font = pg.font.Font("assets/fonts/dogicapixel.ttf", 8)
 
         pg.mixer.music.load("assets/audio/theme.ogg")
-        pg.mixer.music.play(-1, fade_ms=500)
+        pg.mixer.music.play(-1, fade_ms=1000)
 
         self.current_act = 0  # Max 5
         self.states = {
