@@ -16,6 +16,7 @@ class App:
 
         self.screen = pg.display.set_mode(WIN_SIZE, pg.SCALED | pg.FULLSCREEN)
         pg.display.set_caption("Night Terror")
+        pg.display.set_icon(pg.image.load("assets/icon.png"))
         self.clock = pg.time.Clock()
 
         self.caption_font = pg.font.Font("assets/fonts/Zombie.ttf", 24)
