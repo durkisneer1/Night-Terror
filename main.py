@@ -25,7 +25,7 @@ class App:
         pg.mixer.music.load("assets/audio/theme.ogg")
         pg.mixer.music.play(-1, fade_ms=1000)
 
-        self.current_act = 0  # Max 5
+        self.current_act = 3  # Max 5
         self.states = {
             States.MENU: Menu(self),
             States.GAME: Game(self),
@@ -65,8 +65,17 @@ class App:
                     pg.draw.circle(self.screen, (255, 0, 0), eye_positions[i], 1)
 
             if self.restart:
-                self.states[States.GAME] = Game(self)
+                self.states = {
+                    States.MENU: Menu(self),
+                    States.GAME: Game(self),
+                    States.PAUSE: Pause(self),
+                    States.MIRROR: Mirror(self),
+                    States.DREAM: Dream(self),
+                    States.NOTE: Note(self),
+                }
                 pg.mixer.music.play(-1, fade_ms=500)
+                self.current_state = self.states[States.MENU]
+                self.current_act = 0
                 self.restart = False
 
             pg.display.flip()

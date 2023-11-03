@@ -68,7 +68,7 @@ class Game(BaseState):
                 if (
                     self.app.current_act > 3
                     and self.devil.health > 0
-                    # and self.knife_grabbed
+                    and self.knife_grabbed
                 ):
                     self.swing_sfx.play(0)
                     if self.player.rect.colliderect(self.devil.hit_rect):
@@ -134,10 +134,8 @@ class Game(BaseState):
 
         if self.jumpscare:
             if self.devil.rect.colliderect(self.player.rect):
-                # self.app.current_state = self.app.states[States.MENU]
-                # self.app.restart = True
+                self.app.restart = True
                 self.jumpscare_sfx.stop()
-                self.app.done = True
 
     def draw(self):
         for layer in self.layer_tiles:

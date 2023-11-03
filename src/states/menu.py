@@ -22,7 +22,7 @@ class Menu(BaseState):
             self.app.caption_font,
             "NIGHT TERROR",
             (255, 40, 10),
-            (WIN_WIDTH / 2, 50),
+            (WIN_WIDTH / 2, 50)
         )
         self.play_button = Button(
             self.app,
