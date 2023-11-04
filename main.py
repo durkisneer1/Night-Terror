@@ -26,7 +26,7 @@ class App:
         pg.mixer.music.load("assets/audio/theme.ogg")
         pg.mixer.music.play(-1, fade_ms=1000)
 
-        self.current_act = 3  # Max 5
+        self.current_act = 0  # Max 5
         self.states = {
             States.MENU: Menu(self),
             States.GAME: Game(self),
