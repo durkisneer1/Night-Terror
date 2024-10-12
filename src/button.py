@@ -10,8 +10,8 @@ class Button:
         self.hovered = False
 
     def input(self):
-        self.hovered = self.rect.collidepoint(self.app.mouse_pos)
-        return self.hovered and self.app.mouse_input[0]
+        self.hovered = self.rect.collidepoint(pg.mouse.get_pos())
+        return self.hovered and pg.mouse.get_pressed()[0]
 
     def draw(self):
         self.app.screen.blit(self.shadow, self.rect.move(2, 2))

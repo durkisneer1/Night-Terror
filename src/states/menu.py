@@ -14,7 +14,6 @@ class Menu(BaseState):
         self.anim.reverse()
         self.rot_anim = []
         self.pivot = (WIN_WIDTH // 2, WIN_HEIGHT // 2)
-        self.last_angle = 0
         self.angle = 0
 
         self.title = Button(
@@ -40,20 +39,15 @@ class Menu(BaseState):
         )
 
     def handle_events(self, event):
-        if event.type == pg.KEYDOWN:
-            if event.key == pg.K_ESCAPE:
-                self.app.done = True
+        if event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE:
+            self.app.done = True
 
     def update(self):
         self.angle = (self.angle + self.app.dt * 14) % 360
-        if (
-            self.angle - self.last_angle > 0.1
-        ):  # lazy way to prevent unnecessary rotation
-            self.rot_anim = [
-                pg.transform.rotate(image, self.angle if index % 2 else -self.angle)
-                for index, image in enumerate(self.anim)
-            ]
-            self.last_angle = self.angle
+        self.rot_anim = [
+            pg.transform.rotate(image, self.angle if index % 2 else -self.angle)
+            for index, image in enumerate(self.anim)
+        ]
 
     def draw(self):
         self.app.screen.fill((255, 255, 255))

@@ -5,6 +5,7 @@ from src.tile import Tile
 import inspect
 import os
 
+debugging = False  # Set to True for logs
 
 image_load = pg.image.load
 pg_surface = pg.Surface
@@ -19,7 +20,7 @@ def import_folder(
     scale: float = 1,
     highlight: bool = False,
     blur: bool = False,
-) -> list[pg.Surface, ...]:
+) -> list[pg.Surface]:
     surf_list = []
     for _, __, img_file in walk(path):
         for image in img_file:
@@ -60,7 +61,7 @@ def import_image(
     return image_surf
 
 
-def load_tmx_layers(data) -> list[Tile, ...]:
+def load_tmx_layers(data) -> list[Tile]:
     tiles = []
     for layer in data.visible_layers:
         if hasattr(layer, "data"):
@@ -70,7 +71,7 @@ def load_tmx_layers(data) -> list[Tile, ...]:
     return tiles
 
 
-def load_tmx_objects(data, tile_type) -> list[Tile, ...]:
+def load_tmx_objects(data, tile_type) -> list[Tile]:
     tiles = []
     for obj in data.objects:
         if obj.type == tile_type:
@@ -87,19 +88,22 @@ def generate_static(size: tuple | pg.Vector2) -> pg.Surface:
 
 
 def new_image_load(*args, **kwargs):
-    print("Image loaded:", args[0])
+    if debugging:
+        print("Image loaded:", args[0])
     return image_load(*args, **kwargs)
 
 
 def new_surface(*args, **kwargs):
-    calling_file = inspect.currentframe().f_back.f_globals["__file__"]
-    calling_file = os.path.basename(calling_file)
-    print(f"Surface created in {calling_file}")
+    if debugging:
+        calling_file = inspect.currentframe().f_back.f_globals["__file__"]
+        calling_file = os.path.basename(calling_file)
+        print(f"Surface created in {calling_file}")
     return pg_surface(*args, **kwargs)
 
 
 def new_mixer_sound(*args, **kwargs):
-    print("Sound loaded:", args[0])
+    if debugging:
+        print("Sound loaded:", args[0])
     return pg_mixer_sound(*args, **kwargs)
 
 

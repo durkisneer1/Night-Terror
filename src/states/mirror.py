@@ -41,21 +41,19 @@ class Mirror(BaseState):
         self.normal_state = False
 
     def handle_events(self, event):
-        if event.type == pg.KEYDOWN:
-            if event.key == pg.K_ESCAPE:
+        if event.type == pg.KEYDOWN and (event.key == pg.K_ESCAPE or event.key == pg.K_e):
+            self.app.current_state = self.app.states[States.GAME]
+        elif event.type == pg.MOUSEBUTTONDOWN and event.button == pg.BUTTON_LEFT:
+            if not self.mirror_rect.collidepoint(event.pos):
                 self.app.current_state = self.app.states[States.GAME]
-        elif event.type == pg.MOUSEBUTTONDOWN:
-            if event.button == pg.BUTTON_LEFT:
-                if not self.mirror_rect.collidepoint(event.pos):
-                    self.app.current_state = self.app.states[States.GAME]
 
     def update(self):
         self.frame_index = (self.frame_index + self.app.dt * 10) % len(self.static_anim)
         self.current_frame = self.static_anim[int(self.frame_index)]
 
     def draw(self):
-        self.app.screen.blit(self.last_frame, (0, 0))
-        self.app.screen.blit(self.surface_tint, (0, 0))
+        self.app.screen.blit(self.last_frame)
+        self.app.screen.blit(self.surface_tint)
 
         pg.draw.rect(self.app.screen, (20, 20, 20), self.mirror_rect)
         self.app.screen.blit(self.current_frame, self.mirror_rect)

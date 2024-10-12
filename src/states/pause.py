@@ -32,13 +32,12 @@ class Pause(BaseState):
         )
 
     def handle_events(self, event):
-        if event.type == pg.KEYDOWN:
-            if event.key == pg.K_ESCAPE:
-                self.app.current_state = self.app.states[States.GAME]
+        if event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE:
+            self.app.current_state = self.app.states[States.GAME]
 
     def draw(self):
-        self.app.screen.blit(self.last_frame, (0, 0))
-        self.app.screen.blit(self.surface_tint, (0, 0))
+        self.app.screen.blit(self.last_frame)
+        self.app.screen.blit(self.surface_tint)
         self.title.draw()
 
         if self.resume_button.input():
@@ -46,5 +45,5 @@ class Pause(BaseState):
         self.resume_button.draw()
 
         if self.menu_button.input():
-            self.app.restart = True
+            self.app.restart()
         self.menu_button.draw()

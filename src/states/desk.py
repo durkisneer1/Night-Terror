@@ -59,21 +59,19 @@ class Note(BaseState):
         self.normal_state = False
 
     def handle_events(self, event):
-        if event.type == pg.KEYDOWN:
-            if event.key == pg.K_ESCAPE:
-                self.app.current_state = self.app.states[States.GAME]
-        elif event.type == pg.MOUSEBUTTONDOWN:
-            if event.button == pg.BUTTON_LEFT:
-                if self.app.current_act < 3 or self.normal_state:
-                    if not self.note_rect.collidepoint(event.pos):
-                        self.app.current_state = self.app.states[States.GAME]
-                elif self.app.current_act < 4:
-                    if not self.knife_rect.collidepoint(event.pos):
-                        self.app.current_state = self.app.states[States.GAME]
+        if event.type == pg.KEYDOWN and (event.key == pg.K_ESCAPE or event.key == pg.K_e):
+            self.app.current_state = self.app.states[States.GAME]
+        elif event.type == pg.MOUSEBUTTONDOWN and event.button == pg.BUTTON_LEFT:
+            if self.app.current_act < 3 or self.normal_state:
+                if not self.note_rect.collidepoint(event.pos):
+                    self.app.current_state = self.app.states[States.GAME]
+            elif self.app.current_act < 4:
+                if not self.knife_rect.collidepoint(event.pos):
+                    self.app.current_state = self.app.states[States.GAME]
 
     def draw(self):
-        self.app.screen.blit(self.last_frame, (0, 0))
-        self.app.screen.blit(self.surface_tint, (0, 0))
+        self.app.screen.blit(self.last_frame)
+        self.app.screen.blit(self.surface_tint)
 
         if self.app.current_act < 2 or self.normal_state:
             self.app.screen.blit(self.normal_note, self.note_rect)

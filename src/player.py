@@ -1,5 +1,11 @@
+from enum import IntEnum, auto
 import pygame as pg
 from src.utils import import_folder
+
+
+class Axis(IntEnum):
+    X = auto()
+    Y = auto()
 
 
 class Player:
@@ -50,18 +56,20 @@ class Player:
         self.current_frame += self.anim_speed * self.game.app.dt
 
     def move(self):
+        keys = pg.key.get_pressed()
+
         self.step_tick = min(self.step_tick + self.game.app.dt, self.max_step_tick)
         if self.on_ground:
-            if self.game.app.keys[pg.K_SPACE] or self.game.app.keys[pg.K_UP]:
+            if keys[pg.K_SPACE] or keys[pg.K_UP]:
                 self.velocity.y = -200
                 self.on_ground = False
         else:
             self.velocity.y += self.gravity * self.game.app.dt
 
         self.x_direction = 0
-        if self.game.app.keys[pg.K_a] or self.game.app.keys[pg.K_LEFT]:
+        if keys[pg.K_a] or keys[pg.K_LEFT]:
             self.x_direction -= 1
-        if self.game.app.keys[pg.K_d] or self.game.app.keys[pg.K_RIGHT]:
+        if keys[pg.K_d] or keys[pg.K_RIGHT]:
             self.x_direction += 1
 
         if self.x_direction:
@@ -82,30 +90,29 @@ class Player:
 
         self.pos.x += self.velocity.x * self.game.app.dt
         self.rect.x = self.pos.x
-        self.h_collision()
+        self.handle_collision(Axis.X)
         self.pos.y += self.velocity.y * self.game.app.dt
         self.rect.y = self.pos.y
-        self.v_collision()
+        self.handle_collision(Axis.Y)
 
-    def h_collision(self):
+    def handle_collision(self, axis: Axis):
         for tile in self.collision_tiles:
             if self.rect.colliderect(tile.rect):
-                if self.velocity.x > 0:
-                    self.rect.right = tile.rect.left
-                if self.velocity.x < 0:
-                    self.rect.left = tile.rect.right
-                self.pos.x = self.rect.x
-
-    def v_collision(self):
-        for tile in self.collision_tiles:
-            if self.rect.colliderect(tile.rect):
-                if self.velocity.y > 0:
-                    self.rect.bottom = tile.rect.top
-                    self.on_ground = True
-                if self.velocity.y < 0:
-                    self.rect.top = tile.rect.bottom
+                if axis == Axis.X:
+                    if self.velocity.x > 0:
+                        self.rect.right = tile.rect.left
+                    elif self.velocity.x < 0:
+                        self.rect.left = tile.rect.right
+                    self.pos.x = self.rect.x
+                elif axis == Axis.Y:
+                    if self.velocity.y > 0:
+                        self.rect.bottom = tile.rect.top
+                        self.on_ground = True
+                    elif self.velocity.y < 0:
+                        self.rect.top = tile.rect.bottom
                     self.velocity.y = 0
-                self.pos.y = self.rect.y
+                    self.pos.y = self.rect.y
+                break
 
     def draw(self):
         self.animate()

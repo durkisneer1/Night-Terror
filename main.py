@@ -24,32 +24,16 @@ class App:
         self.note_font = pg.font.Font("assets/fonts/dogicapixel.ttf", 8)
 
         pg.mixer.music.load("assets/audio/theme.ogg")
-        pg.mixer.music.play(-1, fade_ms=1000)
+        pg.mixer.music.set_volume(0.5)
 
-        self.current_act = 0  # Max 5
-        self.states = {
-            States.MENU: Menu(self),
-            States.GAME: Game(self),
-            States.PAUSE: Pause(self),
-            States.MIRROR: Mirror(self),
-            States.DREAM: Dream(self),
-            States.NOTE: Note(self),
-        }
-        self.current_state = self.states[States.MENU]
-
-        self.restart = False
         self.done = False
-        self.dt = 0
-        self.mouse_pos = ()
-        self.mouse_input = ()
-        self.keys = ()
+        self.dt: float
+
+        self.restart()
 
     def run(self):
         while not self.done:
-            self.dt = min(self.clock.tick() / 1000, 0.1)
-            self.mouse_pos = pg.mouse.get_pos()
-            self.mouse_input = pg.mouse.get_pressed()
-            self.keys = pg.key.get_pressed()
+            self.dt = self.clock.tick(60) / 1000
 
             for event in pg.event.get():
                 self.current_state.handle_events(event)
@@ -65,24 +49,22 @@ class App:
                 for i in range(self.current_state.devil.health):
                     pg.draw.circle(self.screen, (255, 0, 0), eye_positions[i], 1)
 
-            if self.restart:
-                self.states = {
-                    States.MENU: Menu(self),
-                    States.GAME: Game(self),
-                    States.PAUSE: Pause(self),
-                    States.MIRROR: Mirror(self),
-                    States.DREAM: Dream(self),
-                    States.NOTE: Note(self),
-                }
-                pg.mixer.music.play(-1, fade_ms=500)
-                self.current_state = self.states[States.MENU]
-                self.current_act = 0
-                self.restart = False
-
             pg.display.flip()
+
+    def restart(self):
+        self.states = {
+            States.MENU: Menu(self),
+            States.GAME: Game(self),
+            States.PAUSE: Pause(self),
+            States.MIRROR: Mirror(self),
+            States.DREAM: Dream(self),
+            States.NOTE: Note(self),
+        }
+        pg.mixer.music.play(-1, fade_ms=1000)
+        self.current_state = self.states[States.MENU]
+        self.current_act = 1  # Max 5
 
 
 if __name__ == "__main__":
-    app = App()
-    app.run()
+    App().run()
     pg.quit()

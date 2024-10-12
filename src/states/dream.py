@@ -20,9 +20,9 @@ class Dream(BaseState):
         self.opacity_offset = 0
         self.circle_tick = 0
 
-        self.static_anim = [generate_static(WIN_SIZE) for _ in range(20)]
-        self.static_anim = [pg.transform.grayscale(frame) for frame in self.static_anim]
-        [frame.set_alpha(8) for frame in self.static_anim]
+        self.static_anim = [pg.transform.grayscale(generate_static(WIN_SIZE)) for _ in range(20)]
+        for frame in self.static_anim:
+            frame.set_alpha(8)
         self.frame_index = 0
         self.current_frame = self.static_anim[self.frame_index]
 
@@ -33,6 +33,8 @@ class Dream(BaseState):
             pg.mixer.Sound("assets/audio/dream/fourth.ogg"),
             pg.mixer.Sound("assets/audio/dream/fifth.ogg"),
         )
+        for sound in self.sounds:
+            sound.set_volume(0.55)
 
     def update(self):
         self.frame_index = (self.frame_index + self.app.dt * 10) % len(self.static_anim)
@@ -49,7 +51,7 @@ class Dream(BaseState):
             self.app.current_state = self.app.states[States.GAME]
             self.app.current_act += 1
             if self.app.current_act < 5:
-                pg.mixer.music.play(-1, fade_ms=500)
+                pg.mixer.music.play(-1, fade_ms=1000)
 
     def draw(self):
         if 0 < self.app.current_act < 4 and self.circle_tick > 1:
@@ -65,7 +67,7 @@ class Dream(BaseState):
 
         rect = self.rot_vignette.get_rect(center=(WIN_WIDTH / 2, WIN_HEIGHT / 2))
         self.app.screen.blit(self.rot_vignette, rect)
-        self.app.screen.blit(self.current_frame, (0, 0))
+        self.app.screen.blit(self.current_frame)
 
         for i in range(1, 256, 8):
             pg.draw.circle(
@@ -74,4 +76,4 @@ class Dream(BaseState):
                 (WIN_WIDTH / 2, WIN_HEIGHT / 2),
                 128 - i // 2,
             )
-        self.app.screen.blit(self.base, (0, 0))
+        self.app.screen.blit(self.base)

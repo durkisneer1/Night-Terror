@@ -1,10 +1,10 @@
-from enum import Enum
+from enum import IntEnum, auto
 
 
-class States(Enum):
-    MENU = 0
-    GAME = 1
-    PAUSE = 2
-    MIRROR = 3
-    DREAM = 4
-    NOTE = 5
+class States(IntEnum):
+    MENU = auto()
+    GAME = auto()
+    PAUSE = auto()
+    MIRROR = auto()
+    DREAM = auto()
+    NOTE = auto()

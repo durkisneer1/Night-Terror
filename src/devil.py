@@ -33,14 +33,10 @@ class Devil:
         self.animate()
 
         if dest_x > self.rect.centerx:
-            self.speed = (
-                min(self.speed + self.game.app.dt * 70, self.max_speed)
-            )
+            self.speed = min(self.speed + self.game.app.dt * 70, self.max_speed)
             self.image = pg.transform.flip(self.image, True, False)
         else:
-            self.speed = (
-                max(self.speed - self.game.app.dt * 70, -self.max_speed)
-            )
+            self.speed = max(self.speed - self.game.app.dt * 70, -self.max_speed)
 
         self.pos.x += self.speed * self.game.app.dt
         self.rect.bottomright = self.pos
